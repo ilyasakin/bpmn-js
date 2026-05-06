@@ -56,6 +56,7 @@ function App() {
       xml ? React.createElement(BpmnViewer, {
         ref: viewerRef,
         xml,
+        minimap: true,
         onLoad: result => setStatus(`Loaded (${ result.warnings.length } warnings)`),
         onError: err => setStatus('Error: ' + err.message),
         onSelectionChange: ({ elements }) => setSelection(elements)
