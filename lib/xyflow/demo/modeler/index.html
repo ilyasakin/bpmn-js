@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>bpmn-xyflow modeler demo</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fafafa;
+    }
+    #app { display: flex; flex-direction: column; height: 100vh; }
+    .toolbar {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e6e6e6;
+      background: #fff;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .toolbar button, .toolbar select { font-size: 13px; padding: 4px 10px; }
+    .toolbar .spacer { flex: 1; }
+    .toolbar .info { font-size: 12px; color: #666; }
+    .toolbar .hint { font-size: 11px; color: #888; }
+    #viewer { flex: 1; background: #fff; cursor: grab; }
+    #viewer:active { cursor: grabbing; }
+    #xml-out { display: none; max-height: 240px; overflow: auto; padding: 8px 14px; background: #f3f3f3; border-top: 1px solid #e6e6e6; font-family: monospace; font-size: 11px; white-space: pre; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="toolbar">
+      <select id="sample-select"></select>
+      <button id="undo-btn" title="Ctrl+Z">Undo</button>
+      <button id="redo-btn" title="Ctrl+Shift+Z">Redo</button>
+      <button id="export-btn">Export XML</button>
+      <span class="hint">tip: drag to move • shift+drag to connect • dbl-click to rename • Del to delete</span>
+      <span class="spacer"></span>
+      <span class="info" id="status"></span>
+    </div>
+    <div id="viewer"></div>
+    <pre id="xml-out"></pre>
+  </div>
+  <script src="/modeler/demo.bundle.js"></script>
+</body>
+</html>
