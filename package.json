@@ -1,74 +1,65 @@
 {
-  "name": "bpmn-js",
-  "version": "19.0.0",
-  "description": "A bpmn 2.0 toolkit and web modeler (xyflow-based)",
+  "name": "bpmn-xyflow",
+  "version": "0.1.0",
+  "description": "BPMN 2.0 viewer and modeler for the web, built on @xyflow/system. Fork of bpmn-js.",
   "main": "lib/index.js",
+  "type": "module",
   "files": [
     "lib",
     "!lib/**/*.spec.ts",
     "!lib/demo"
   ],
   "scripts": {
-    "lint": "eslint .",
-    "format": "run-s format:markdown 'lint -- --fix'",
-    "format:markdown": "remark . -qo",
+    "lint": "oxlint",
+    "format": "oxfmt",
     "start": "node lib/demo/serve.mjs",
-    "test": "run-s test:smoke test:react test:multi",
+    "dev": "vite",
+    "build": "vite build",
+    "test": "pnpm run test:smoke && pnpm run test:react && pnpm run test:multi",
     "test:smoke": "node lib/demo/modeler/smoke-test.mjs",
     "test:react": "node lib/demo/react/smoke-test.mjs",
     "test:multi": "node lib/demo/multi-framework-smoke-test.mjs"
   },
   "engines": {
-    "node": "*"
+    "node": ">=20"
   },
+  "packageManager": "pnpm@10.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bpmn-io/bpmn-js"
+    "url": "https://github.com/your-org/bpmn-xyflow"
   },
   "keywords": [
     "bpmn",
-    "bpmn-js",
-    "toolkit",
-    "web modeler",
+    "bpmn-xyflow",
+    "xyflow",
+    "react-flow",
     "modeler",
     "modeling",
-    "process modeling",
-    "xyflow"
+    "process modeling"
   ],
-  "author": {
-    "name": "Nico Rehwaldt",
-    "url": "https://github.com/nikku"
-  },
-  "contributors": [
-    {
-      "name": "bpmn.io contributors",
-      "url": "https://github.com/bpmn-io"
-    }
-  ],
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "sideEffects": [
     "*.css"
   ],
-  "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.5",
-    "@babel/preset-react": "^7.28.5",
-    "babel-loader": "^10.1.1",
-    "bpmn-font": "^0.12.1",
-    "cross-env": "^10.1.0",
-    "eslint": "^9.39.4",
-    "eslint-plugin-bpmn-io": "^2.2.0",
-    "npm-run-all2": "^8.0.4",
-    "puppeteer": "^24.42.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "remark-cli": "^12.0.1",
-    "remark-preset-bpmn-io": "^0.4.0",
-    "svelte": "^4.2.20",
-    "svelte-loader": "^3.2.4",
-    "typescript": "^5.9.3",
-    "vue": "^3.5.34",
-    "webpack": "^5.106.2"
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "svelte": ">=5",
+    "vue": ">=3"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "svelte": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@xyflow/system": "^0.0.76",
@@ -80,13 +71,19 @@
     "min-dom": "^5.3.0",
     "tiny-svg": "^4.1.4"
   },
-  "remarkConfig": {
-    "plugins": [
-      "preset-bpmn-io",
-      [
-        "lint-no-html",
-        false
-      ]
-    ]
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.1.1",
+    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "bpmn-font": "^0.12.1",
+    "oxfmt": "*",
+    "oxlint": "^1.0.0",
+    "puppeteer": "^24.42.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "svelte": "^5.55.5",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.0",
+    "vue": "^3.5.34"
   }
 }

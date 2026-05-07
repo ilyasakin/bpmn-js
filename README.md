@@ -1,17 +1,20 @@
-# bpmn-js — BPMN 2.0 for the web (xyflow-based)
+# bpmn-xyflow — BPMN 2.0 for the web (xyflow-based)
 
-View and edit BPMN 2.0 diagrams in the browser. This implementation
-is built on [@xyflow/system](https://github.com/xyflow/xyflow) for
-pan/zoom and the original
+View and edit BPMN 2.0 diagrams in the browser. Built on
+[@xyflow/system](https://github.com/xyflow/xyflow) for pan/zoom and the
+original
 [BpmnRenderer](./lib/draw/BpmnRenderer.js) /
 [TextRenderer](./lib/draw/TextRenderer.js) /
-[PathMap](./lib/draw/PathMap.js) for the BPMN shape SVG paths. The
-older diagram-js-based viewer/modeler stack has been replaced.
+[PathMap](./lib/draw/PathMap.js) (carried over from
+[bpmn-js](https://github.com/bpmn-io/bpmn-js), this project's upstream).
+
+This is a fork: the diagram-js stack has been replaced; the public API
+is smaller and direct.
 
 ## Quick start
 
 ```js
-import { Viewer, Modeler } from 'bpmn-js';
+import { Viewer, Modeler } from 'bpmn-xyflow';
 
 const viewer = new Viewer({ container: document.getElementById('app') });
 await viewer.importXML(xml);
@@ -27,17 +30,19 @@ const modeler = new Modeler({
 });
 await modeler.importXML(xml);
 
-// Save back out
 const xml = await modeler.getXML();
 ```
 
 ## Framework wrappers
 
 ```js
-import { BpmnViewer } from 'bpmn-js/lib/react';   // React 18+
-import { BpmnViewer } from 'bpmn-js/lib/vue';     // Vue 3
-import BpmnViewer from 'bpmn-js/lib/svelte/BpmnViewer.svelte';  // Svelte 4
+import { BpmnViewer } from 'bpmn-xyflow/lib/react';   // React 18+
+import { BpmnViewer } from 'bpmn-xyflow/lib/vue';     // Vue 3
+import BpmnViewer from 'bpmn-xyflow/lib/svelte/BpmnViewer.svelte';  // Svelte 4
 ```
+
+`react`, `react-dom`, `vue`, and `svelte` are declared as **optional
+peer dependencies** — install only the ones you actually use.
 
 Each wrapper takes the same `xml` prop, forwards every viewer event
 (`onElementClick` / `onSelectionChange` / `onViewportChange` / etc.)
@@ -68,8 +73,8 @@ and exposes the imperative API (`fitView`, `select`, `setViewport`,
 ## Demo
 
 ```sh
-npm install
-npm start
+pnpm install
+pnpm start
 ```
 
 Then open the routes the dev server prints:
@@ -77,19 +82,26 @@ Then open the routes the dev server prints:
 | Route       | What |
 |-------------|------|
 | `/`         | vanilla viewer demo (read-only) |
-| `/modeler`  | full modeler with palette, minimap, export |
-| `/react`    | React-wrapped demo |
-| `/vue`      | Vue-wrapped demo |
-| `/svelte`   | Svelte-wrapped demo |
+| `/modeler/` | full modeler with palette, minimap, export |
+| `/react/`   | React-wrapped demo |
+| `/vue/`     | Vue-wrapped demo |
+| `/svelte/`  | Svelte-wrapped demo |
 
 ## Tests
 
 ```sh
-npm test                    # all puppeteer-driven smoke suites
-npm run test:smoke          # modeler (~56 cases)
-npm run test:react          # React wrapper
-npm run test:multi          # React, Vue, and Svelte wrappers
+pnpm test                    # all puppeteer-driven smoke suites
+pnpm test:smoke              # modeler (~56 cases)
+pnpm test:react              # React wrapper
+pnpm test:multi              # React, Vue, and Svelte wrappers
 ```
+
+## Tooling
+
+- Build / dev: [Vite](https://vitejs.dev) (no webpack, no babel-loader)
+- Lint: [oxlint](https://oxc.rs) — `pnpm lint`
+- Format: oxfmt — `pnpm format`
+- Package manager: [pnpm](https://pnpm.io)
 
 ## Repo layout
 
@@ -98,7 +110,7 @@ lib/
 ├── Viewer.js         read-only viewer
 ├── Modeler.js        full editor
 ├── Importer.js       BPMN XML → graph
-├── Renderer.js       wraps the bpmn-js BpmnRenderer
+├── Renderer.js       wraps the upstream BpmnRenderer
 ├── modeling/         CommandStack + Rules
 ├── react/  vue/  svelte/   framework wrappers
 ├── demo/             dev server + smoke tests
@@ -110,4 +122,6 @@ lib/
 
 ## License
 
-See [LICENSE](./LICENSE).
+[MIT](./LICENSE). Forked from the original [bpmn-js](https://github.com/bpmn-io/bpmn-js)
+under its MIT-style license; the original Camunda Services GmbH
+copyright is preserved in `LICENSE`.

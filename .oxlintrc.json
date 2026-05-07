@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "warn"
+  },
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "lib/demo/.cache"
+  ],
+  "rules": {
+    "no-this-in-exported-function": "off",
+    "no-async-endpoint-handlers": "off",
+    "no-shadow": "off",
+    "no-underscore-dangle": "off",
+    "consistent-function-scoping": "off"
+  }
+}

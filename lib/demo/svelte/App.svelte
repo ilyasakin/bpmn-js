@@ -11,10 +11,10 @@
   ];
   const FIXTURE_BASE = '/test/fixtures/bpmn/';
 
-  let idx = 0;
-  let xml = '';
-  let status = '';
-  let selection = [];
+  let idx = $state(0);
+  let xml = $state('');
+  let status = $state('');
+  let selection = $state([]);
   let viewer;
 
   async function loadSample(i) {
@@ -30,26 +30,26 @@
     loadSample(idx);
   }
 
-  function onLoad(e) {
-    status = `Loaded (${ e.detail.warnings.length } warnings)`;
+  function handleLoad(result) {
+    status = `Loaded (${ result.warnings.length } warnings)`;
   }
-  function onError(e) {
-    status = 'Error: ' + e.detail.message;
+  function handleError(err) {
+    status = 'Error: ' + err.message;
   }
-  function onSelection(e) {
-    selection = e.detail.elements;
+  function handleSelection(payload) {
+    selection = payload.elements;
   }
 </script>
 
 <div class="app">
   <div class="toolbar">
-    <select value={idx} on:change={onChange}>
+    <select value={idx} onchange={onChange}>
       {#each SAMPLES as s, i}
         <option value={i}>{s.label}</option>
       {/each}
     </select>
-    <button on:click={() => viewer?.fitView()}>Fit view</button>
-    <button on:click={() => viewer?.setViewport({ x: 0, y: 0, zoom: 1 })}>Reset</button>
+    <button onclick={() => viewer?.fitView()}>Fit view</button>
+    <button onclick={() => viewer?.setViewport({ x: 0, y: 0, zoom: 1 })}>Reset</button>
     <span class="spacer"></span>
     <span class="info" id="selection">
       {#if selection.length}
@@ -64,9 +64,9 @@
         bind:this={viewer}
         {xml}
         minimap={true}
-        on:load={onLoad}
-        on:error={onError}
-        on:selection-change={onSelection}
+        onload={handleLoad}
+        onerror={handleError}
+        onselectionChange={handleSelection}
       />
     {/if}
   </div>

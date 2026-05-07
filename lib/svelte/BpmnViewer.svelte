@@ -1,32 +1,47 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import BpmnXyflowViewer from '../Viewer';
 
-  export let xml = '';
-  export let bpmnDiagramId = '';
-  export let config = undefined;
-  export let minZoom = undefined;
-  export let maxZoom = undefined;
-  export let fitPadding = undefined;
-  export let fitViewOnInit = true;
-  export let selectOnClick = true;
-  export let minimap = false;
-  export let keyboard = true;
-  export let refitOnResize = true;
+  let {
+    xml = '',
+    bpmnDiagramId = '',
+    config = undefined,
+    minZoom = undefined,
+    maxZoom = undefined,
+    fitPadding = undefined,
+    fitViewOnInit = true,
+    selectOnClick = true,
+    minimap = false,
+    keyboard = true,
+    refitOnResize = true,
+    onelementClick,
+    onelementHover,
+    onelementOut,
+    onselectionChange,
+    onviewportChange,
+    onload,
+    onerror
+  } = $props();
 
   let container;
   let viewer;
   const offs = [];
 
-  const dispatch = createEventDispatcher();
-
   const VIEWER_EVENTS = [
-    [ 'element-click', 'element.click' ],
-    [ 'element-hover', 'element.hover' ],
-    [ 'element-out', 'element.out' ],
-    [ 'selection-change', 'selection.change' ],
-    [ 'viewport-change', 'viewport.change' ]
+    [ 'onelementClick', 'element.click' ],
+    [ 'onelementHover', 'element.hover' ],
+    [ 'onelementOut', 'element.out' ],
+    [ 'onselectionChange', 'selection.change' ],
+    [ 'onviewportChange', 'viewport.change' ]
   ];
+
+  const callbacks = () => ({
+    onelementClick,
+    onelementHover,
+    onelementOut,
+    onselectionChange,
+    onviewportChange
+  });
 
   onMount(() => {
     viewer = new BpmnXyflowViewer({
@@ -37,7 +52,10 @@
     });
 
     for (const [ name, evt ] of VIEWER_EVENTS) {
-      offs.push(viewer.on(evt, payload => dispatch(name, payload)));
+      offs.push(viewer.on(evt, payload => {
+        const fn = callbacks()[name];
+        if (typeof fn === 'function') fn(payload);
+      }));
     }
 
     if (xml) importNow();
@@ -55,14 +73,15 @@
   function importNow() {
     if (!viewer || !xml) return;
     viewer.importXML(xml, bpmnDiagramId || undefined)
-      .then(result => dispatch('load', result))
-      .catch(err => dispatch('error', err));
+      .then(result => onload?.(result))
+      .catch(err => onerror?.(err));
   }
 
-  // re-import on xml change
-  $: if (viewer && xml) importNow();
+  $effect(() => {
+    // re-import whenever xml changes
+    if (viewer && xml) importNow();
+  });
 
-  // expose imperative methods on the component instance
   export function fitView(padding) { return viewer?.fitView(padding); }
   export function setViewport(v, opts) { return viewer?.setViewport(v, opts); }
   export function getViewport() { return viewer?.getViewport(); }
