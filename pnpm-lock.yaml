@@ -11,9 +11,6 @@ importers:
       '@xyflow/system':
         specifier: ^0.0.76
         version: 0.0.76
-      bpmn-moddle:
-        specifier: ^10.0.0
-        version: 10.0.0
       diagram-js:
         specifier: ^15.14.0
         version: 15.14.0
@@ -42,9 +39,6 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^6.0.0
         version: 6.0.6(vite@8.0.11(@types/node@25.6.0))(vue@3.5.34(typescript@5.9.3))
-      bpmn-font:
-        specifier: ^0.12.1
-        version: 0.12.1
       oxfmt:
         specifier: '*'
         version: 0.48.0
@@ -721,13 +715,6 @@ packages:
     resolution: {integrity: sha512-bopVNp6ugyA150DDuZfPFdt1KZ5a94ZDiwX4hMgZDzF+GttD80lEy8kj98kbyhLXnPvhtIo93mdnLIjpCAeeOw==}
     engines: {node: '>=10.0.0'}
 
-  bpmn-font@0.12.1:
-    resolution: {integrity: sha512-quQ47cFuFSZw3y5ta4J2eg+g/UG38pN9Uk8QzR988RyjFP7agdgwmVXPErCGqaFm4UyTTNGtx9jCFdcxw990vg==}
-
-  bpmn-moddle@10.0.0:
-    resolution: {integrity: sha512-vXePD5jkatcILmM3zwJG/m6IIHIghTGB7WvgcdEraEw8E8VdJHrTgrvBUhbzqaXJpnsGQz15QS936xeBY6l9aA==}
-    engines: {node: '>= 20.12'}
-
   browserslist@4.28.2:
     resolution: {integrity: sha512-48xSriZYYg+8qXna9kwqjIVzuQxi+KYWp2+5nCYnYKPTr0LvD89Jqk2Or5ogxz0NUMfIjhh2lIUX/LyX9B4oIg==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -1113,15 +1100,6 @@ packages:
   mitt@3.0.1:
     resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
 
-  moddle-xml@12.0.0:
-    resolution: {integrity: sha512-NJc2+sCe4tvuGlaUBcoZcYf6j9f+z+qxHOyGm/LB3ZrlJXVPPHoBTg/KXgDRCufdBJhJ3AheFs3QU/abABNzRg==}
-    engines: {node: '>= 18'}
-    peerDependencies:
-      moddle: '>= 6.2.0'
-
-  moddle@8.1.0:
-    resolution: {integrity: sha512-dBddc1CNuZHgro8nQWwfPZ2BkyLWdnxoNpPu9d+XKPN96DAiiBOeBw527ft++ebDuFez5PMdaR3pgUgoOaUGrA==}
-
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
@@ -1246,10 +1224,6 @@ packages:
     resolution: {integrity: sha512-phmyKBpuBdRYDf4hgyynGAYn/rDDe+iZXKVJ7WX5b1zQzpLkP5oJRPGsfJuHdzPMlyyEO/4sPW6yfSx2gf7lVg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
-
-  saxen@11.0.2:
-    resolution: {integrity: sha512-WDb4gqac8uiJzOdOdVpr9NWh9NrJMm7Brn5GX2Poj+mjE/QTXqYQENr8T/mom54dDDgbd3QjwTg23TRHYiWXRA==}
-    engines: {node: '>= 20.12'}
 
   scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
@@ -2012,14 +1986,6 @@ snapshots:
 
   basic-ftp@5.3.1: {}
 
-  bpmn-font@0.12.1: {}
-
-  bpmn-moddle@10.0.0:
-    dependencies:
-      min-dash: 5.0.0
-      moddle: 8.1.0
-      moddle-xml: 12.0.0(moddle@8.1.0)
-
   browserslist@4.28.2:
     dependencies:
       baseline-browser-mapping: 2.10.27
@@ -2347,16 +2313,6 @@ snapshots:
 
   mitt@3.0.1: {}
 
-  moddle-xml@12.0.0(moddle@8.1.0):
-    dependencies:
-      min-dash: 5.0.0
-      moddle: 8.1.0
-      saxen: 11.0.2
-
-  moddle@8.1.0:
-    dependencies:
-      min-dash: 5.0.0
-
   ms@2.1.3: {}
 
   nanoid@3.3.12: {}
@@ -2556,8 +2512,6 @@ snapshots:
       '@rolldown/binding-wasm32-wasi': 1.0.0-rc.18
       '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.18
       '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.18
-
-  saxen@11.0.2: {}
 
   scheduler@0.23.2:
     dependencies:
