@@ -5,3 +5,8 @@ lib/**/*.d.ts
 .idea
 *.iml
 .DS_Store
+
+# Screenshot artifacts written by lib/xyflow/demo/**/screenshot*.mjs
+# scripts (default OUT_DIR=/tmp; this guards manual overrides).
+/editor-*.png
+/xyflow-*.png
