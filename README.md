@@ -1,81 +1,113 @@
-# bpmn-js - BPMN 2.0 for the web
+# bpmn-js — BPMN 2.0 for the web (xyflow-based)
 
-[![Build Status](https://github.com/bpmn-io/bpmn-js/workflows/CI/badge.svg)](https://github.com/bpmn-io/bpmn-js/actions?query=workflow%3ACI)
+View and edit BPMN 2.0 diagrams in the browser. This implementation
+is built on [@xyflow/system](https://github.com/xyflow/xyflow) for
+pan/zoom and the original
+[BpmnRenderer](./lib/draw/BpmnRenderer.js) /
+[TextRenderer](./lib/draw/TextRenderer.js) /
+[PathMap](./lib/draw/PathMap.js) for the BPMN shape SVG paths. The
+older diagram-js-based viewer/modeler stack has been replaced.
 
-View and edit BPMN 2.0 diagrams in the browser.
+## Quick start
 
-[![bpmn-js screencast](./resources/screencast.gif "bpmn-js in action")](http://demo.bpmn.io/s/start)
+```js
+import { Viewer, Modeler } from 'bpmn-js';
 
-## Installation
-
-Use the library [pre-packaged](https://github.com/bpmn-io/bpmn-js-examples/tree/main/pre-packaged)
-or include it [via npm](https://github.com/bpmn-io/bpmn-js-examples/tree/main/bundling)
-into your node-style web-application.
-
-## Usage
-
-To get started, create a [bpmn-js](https://github.com/bpmn-io/bpmn-js) instance
-and render [BPMN 2.0 diagrams](https://www.omg.org/spec/BPMN/2.0.2/) in the browser:
-
-```javascript
-const xml = '...'; // my BPMN 2.0 xml
-const viewer = new BpmnJS({
-  container: 'body'
-});
-
-try {
-  const { warnings } = await viewer.importXML(xml);
-
-  console.log('rendered');
-} catch (err) {
-  console.log('error rendering', err);
-}
+const viewer = new Viewer({ container: document.getElementById('app') });
+await viewer.importXML(xml);
+viewer.fitView();
 ```
 
-Checkout our [examples](https://github.com/bpmn-io/bpmn-js-examples) for many
-more supported usage scenarios.
+For full editing:
 
-## Resources
+```js
+const modeler = new Modeler({
+  container: document.getElementById('app'),
+  minimap: true
+});
+await modeler.importXML(xml);
 
-* [Demo](http://demo.bpmn.io)
-* [Issues](https://github.com/bpmn-io/bpmn-js/issues)
-* [Examples](https://github.com/bpmn-io/bpmn-js-examples)
-* [Forum](https://forum.bpmn.io)
-* [Changelog](./CHANGELOG.md)
+// Save back out
+const xml = await modeler.getXML();
+```
 
-## Build and Run
+## Framework wrappers
 
-Prepare the project by installing all dependencies:
+```js
+import { BpmnViewer } from 'bpmn-js/lib/react';   // React 18+
+import { BpmnViewer } from 'bpmn-js/lib/vue';     // Vue 3
+import BpmnViewer from 'bpmn-js/lib/svelte/BpmnViewer.svelte';  // Svelte 4
+```
+
+Each wrapper takes the same `xml` prop, forwards every viewer event
+(`onElementClick` / `onSelectionChange` / `onViewportChange` / etc.)
+and exposes the imperative API (`fitView`, `select`, `setViewport`,
+…) via the framework's standard ref / `bind:this` mechanism.
+
+## Modeler features
+
+- Move shapes (drag); edges follow with bend preservation
+- Resize shapes (8 handles) — descendants of a Lane / SubProcess
+  follow; attached BoundaryEvents slide along the perimeter
+- Connect shapes — context-pad button, hover-edge handle, or
+  Shift+drag — with BPMN-aware type inference (SequenceFlow /
+  MessageFlow / Association / DataAssociation)
+- Reconnect by dragging an edge endpoint to a different shape
+- Inline label editing (seamless: editor matches renderer font and
+  position, follows zoom while open)
+- Undo / redo (`Ctrl/Cmd+Z`, `Ctrl/Cmd+Shift+Z`); compound steps —
+  one user gesture = one undo
+- Copy / paste (`Cmd+C` / `Cmd+V` / `Cmd+D` to duplicate)
+- Modeling rules + connection-type inference
+- BoundaryEvent attach / detach on drop
+- SubProcess drill-in / collapse, with a per-level command stack
+- Snap to siblings + 5px grid + alignment guides; `Shift` constrains
+  to dominant axis
+- BPMN XML round-trip via `bpmn-moddle`'s writer
+
+## Demo
 
 ```sh
 npm install
+npm start
 ```
 
-Then, depending on your use-case you may run any of the following commands:
+Then open the routes the dev server prints:
+
+| Route       | What |
+|-------------|------|
+| `/`         | vanilla viewer demo (read-only) |
+| `/modeler`  | full modeler with palette, minimap, export |
+| `/react`    | React-wrapped demo |
+| `/vue`      | Vue-wrapped demo |
+| `/svelte`   | Svelte-wrapped demo |
+
+## Tests
 
 ```sh
-# build the library and run all tests
-npm run all
-
-# spin up a single local modeler instance
-npm start
-
-# run the full development setup
-npm run dev
+npm test                    # all puppeteer-driven smoke suites
+npm run test:smoke          # modeler (~56 cases)
+npm run test:react          # React wrapper
+npm run test:multi          # React, Vue, and Svelte wrappers
 ```
 
-You may need to perform [additional project setup](./docs/project/SETUP.md) when
-building the latest development snapshot.
+## Repo layout
 
-## Related
-
-bpmn-js builds on top of a few powerful tools:
-
-* [bpmn-moddle](https://github.com/bpmn-io/bpmn-moddle): Read / write support for BPMN 2.0 XML in the browsers
-* [diagram-js](https://github.com/bpmn-io/diagram-js): Diagram rendering and editing toolkit
-
-It is an extensible toolkit, complemented by many [additional utilities](https://github.com/bpmn-io/awesome-bpmn-io).
+```
+lib/
+├── Viewer.js         read-only viewer
+├── Modeler.js        full editor
+├── Importer.js       BPMN XML → graph
+├── Renderer.js       wraps the bpmn-js BpmnRenderer
+├── modeling/         CommandStack + Rules
+├── react/  vue/  svelte/   framework wrappers
+├── demo/             dev server + smoke tests
+├── draw/             reused: BpmnRenderer, TextRenderer, PathMap
+├── import/           reused: BpmnTreeWalker
+├── util/             reused: ModelUtil, LabelUtil, DiUtil, …
+└── model/            BPMN type definitions
+```
 
 ## License
 
-Use under the terms of the [bpmn.io license](http://bpmn.io/license).
+See [LICENSE](./LICENSE).
